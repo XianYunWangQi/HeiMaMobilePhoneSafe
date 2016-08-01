@@ -1,6 +1,8 @@
 package com.waynian.mobilephonesafe.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import com.waynian.mobilephonesafe.BuildConfig;
 import com.waynian.mobilephonesafe.R;
 import com.waynian.mobilephonesafe.utils.StreamUtil;
+import com.waynian.mobilephonesafe.utils.ToastUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,16 +52,20 @@ public class SplashActivity extends Activity {
             switch (msg.what){
                 case UPDATE_VERSION:
                     //弹出对话框，提示用户更新
+                    showUpdateDialog();
                     break;
                 case ENTER_HOME:
                     //直接进入主界面
                     enterHome();
                     break;
                 case URL_ERROR:
+                    ToastUtil.show(SplashActivity.this,"URL异常");
                     break;
                 case IO_ERROR:
+                    ToastUtil.show(SplashActivity.this,"IO异常");
                     break;
                 case JSON_ERROR:
+                    ToastUtil.show(SplashActivity.this,"JSON异常");
                     break;
                 default:
                     break;
@@ -66,6 +73,34 @@ public class SplashActivity extends Activity {
             }
         }
     };
+
+    /**
+     * 弹出对话框，提示用户更新
+     */
+    private void showUpdateDialog() {
+        //对话框是依赖于Activity存在的
+        Log.e(TAG,"要跳出更新界面了");
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.mipmap.ic_launcher);
+        builder.setTitle("版本更新");
+        builder.setMessage(mVersionDes);
+        builder.setPositiveButton("立即更新", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //下载APK，downloadUrl
+
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //取消，并跳转主界面
+                enterHome();
+            }
+        });
+        builder.show();
+
+    }
 
     private void enterHome() {
         //进入应用程序的主界面
@@ -151,16 +186,16 @@ public class SplashActivity extends Activity {
                         JSONObject jsonObject = new JSONObject(json);
                         String downLoadUrl = jsonObject.getString("downLoadUrl");
                         String versionCode = jsonObject.getString("versionCode");
-                        String versionDes = jsonObject.getString("versionDes");
+                        mVersionDes = jsonObject.getString("versionDes");
                         String versionName = jsonObject.getString("versionName");
 
                         Log.e(TAG, downLoadUrl);
                         Log.e(TAG, versionCode);
-                        Log.e(TAG, versionDes);
+                        Log.e(TAG, mVersionDes);
                         Log.e(TAG, versionName);
 
                         //比对版本号
-                        if (mLocal_Versioncode < Integer.parseInt(versionCode)){
+                        if (mLocal_Versioncode <Integer.parseInt(versionCode)){
                             //提示用户更新,弹出对话框，消息机制
                             msg.what = UPDATE_VERSION;
                         }else {
