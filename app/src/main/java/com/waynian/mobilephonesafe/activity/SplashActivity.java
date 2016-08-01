@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -18,6 +19,7 @@ import com.waynian.mobilephonesafe.utils.ToastUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -46,10 +48,10 @@ public class SplashActivity extends Activity {
     private String mVersionDes;
     private String mDownloadUrl;
 
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
+            switch (msg.what) {
                 case UPDATE_VERSION:
                     //弹出对话框，提示用户更新
                     showUpdateDialog();
@@ -59,13 +61,13 @@ public class SplashActivity extends Activity {
                     enterHome();
                     break;
                 case URL_ERROR:
-                    ToastUtil.show(SplashActivity.this,"URL异常");
+                    ToastUtil.show(SplashActivity.this, "URL异常");
                     break;
                 case IO_ERROR:
-                    ToastUtil.show(SplashActivity.this,"IO异常");
+                    ToastUtil.show(SplashActivity.this, "IO异常");
                     break;
                 case JSON_ERROR:
-                    ToastUtil.show(SplashActivity.this,"JSON异常");
+                    ToastUtil.show(SplashActivity.this, "JSON异常");
                     break;
                 default:
                     break;
@@ -79,7 +81,7 @@ public class SplashActivity extends Activity {
      */
     private void showUpdateDialog() {
         //对话框是依赖于Activity存在的
-        Log.e(TAG,"要跳出更新界面了");
+        Log.e(TAG, "要跳出更新界面了");
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setIcon(R.mipmap.ic_launcher);
         builder.setTitle("版本更新");
@@ -88,6 +90,7 @@ public class SplashActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //下载APK，downloadUrl
+                downloadApk();
 
             }
         });
@@ -102,9 +105,27 @@ public class SplashActivity extends Activity {
 
     }
 
+    /*
+    下载APK
+     */
+    private void downloadApk() {
+        //APK的下载地址，APK所在路径
+
+        //1.判断SD卡是否可用,是否挂载上
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+            //2.SD卡对应的路径
+            String path = Environment.getExternalStorageDirectory().getAbsolutePath()+
+                    File.separator+"mobliePhoneSafe.apk";
+            //3.发送请求，获取APK，放到指定位置
+
+
+
+        }
+    }
+
     private void enterHome() {
         //进入应用程序的主界面
-        Intent intent = new Intent(this,MainActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         //开启一个新的界面后，将导航界面关闭
         finish();
@@ -195,10 +216,10 @@ public class SplashActivity extends Activity {
                         Log.e(TAG, versionName);
 
                         //比对版本号
-                        if (mLocal_Versioncode <Integer.parseInt(versionCode)){
+                        if (mLocal_Versioncode < Integer.parseInt(versionCode)) {
                             //提示用户更新,弹出对话框，消息机制
                             msg.what = UPDATE_VERSION;
-                        }else {
+                        } else {
                             //进去主界面
                             msg.what = ENTER_HOME;
                         }
@@ -214,13 +235,13 @@ public class SplashActivity extends Activity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                     msg.what = JSON_ERROR;
-                }finally {
+                } finally {
                     //指定睡眠时间,请求网络的时超过四秒，不做睡眠
 
                     long endtime = System.currentTimeMillis();
-                    if ((endtime - starttime)<4000){
+                    if ((endtime - starttime) < 4000) {
                         try {
-                            Thread.sleep(4000-(endtime - starttime));
+                            Thread.sleep(4000 - (endtime - starttime));
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
