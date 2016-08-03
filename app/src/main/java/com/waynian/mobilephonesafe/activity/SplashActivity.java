@@ -11,6 +11,10 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.waynian.mobilephonesafe.BuildConfig;
 import com.waynian.mobilephonesafe.R;
 import com.waynian.mobilephonesafe.utils.StreamUtil;
@@ -117,7 +121,40 @@ public class SplashActivity extends Activity {
             String path = Environment.getExternalStorageDirectory().getAbsolutePath()+
                     File.separator+"mobliePhoneSafe.apk";
             //3.发送请求，获取APK，放到指定位置
+            HttpUtils httpUtils= new HttpUtils();
+            httpUtils.download(mDownloadUrl, path, new RequestCallBack<File>() {
+                @Override
+                public void onSuccess(ResponseInfo<File> responseInfo) {
+                    //下载成功
+                    File file = responseInfo.result;
+                    Log.e(TAG,"下载成功");
+                }
 
+                @Override
+                public void onFailure(HttpException e, String s) {
+                    //下载失败
+                    Log.e(TAG,"下载失败");
+
+                }
+
+                //刚刚下载的方法
+                @Override
+                public void onStart() {
+                    super.onStart();
+                    Log.e(TAG,"刚刚下载");
+                }
+
+                //下载过程中的方法(下载apk的总大小，当前下载位置，是否在下载)
+                @Override
+                public void onLoading(long total, long current, boolean isUploading) {
+                    super.onLoading(total, current, isUploading);
+                    Log.e(TAG,"下载中...");
+                    Log.e(TAG,"total"+total);
+                    Log.e(TAG,"current"+current);
+
+
+                }
+            });
 
 
         }
@@ -205,12 +242,12 @@ public class SplashActivity extends Activity {
                         Log.i(TAG, json);
                         //7.json解析
                         JSONObject jsonObject = new JSONObject(json);
-                        String downLoadUrl = jsonObject.getString("downLoadUrl");
+                        mDownloadUrl = jsonObject.getString("downLoadUrl");
                         String versionCode = jsonObject.getString("versionCode");
                         mVersionDes = jsonObject.getString("versionDes");
                         String versionName = jsonObject.getString("versionName");
 
-                        Log.e(TAG, downLoadUrl);
+                        Log.e(TAG, mDownloadUrl);
                         Log.e(TAG, versionCode);
                         Log.e(TAG, mVersionDes);
                         Log.e(TAG, versionName);
