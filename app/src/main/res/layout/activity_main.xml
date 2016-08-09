@@ -35,8 +35,10 @@
         android:textSize="15sp" />
 
     <!--numColumns 指定列数-->
+    <!--android:verticalSpacing="10dp" 指定内部条目竖直方向的间距-->
     <GridView
         android:id="@+id/gv_home"
+        android:verticalSpacing="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:numColumns="3">
