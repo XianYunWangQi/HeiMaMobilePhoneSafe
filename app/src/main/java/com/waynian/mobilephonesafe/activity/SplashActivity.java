@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.animation.AlphaAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lidroid.xutils.HttpUtils;
@@ -51,6 +54,7 @@ public class SplashActivity extends Activity {
     private int mLocal_Versioncode;
     private String mVersionDes;
     private String mDownloadUrl;
+    private RelativeLayout rl_root;
 
     private Handler mHandler = new Handler() {
         @Override
@@ -66,12 +70,15 @@ public class SplashActivity extends Activity {
                     break;
                 case URL_ERROR:
                     ToastUtil.show(SplashActivity.this, "URL异常");
+                    enterHome();
                     break;
                 case IO_ERROR:
                     ToastUtil.show(SplashActivity.this, "IO异常");
+                    enterHome();
                     break;
                 case JSON_ERROR:
                     ToastUtil.show(SplashActivity.this, "JSON异常");
+                    enterHome();
                     break;
                 default:
                     break;
@@ -79,6 +86,34 @@ public class SplashActivity extends Activity {
             }
         }
     };
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //去除标题栏,必须要继承Activity，不能继承AppCompatActivity
+//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_splash);
+
+        //初始化UI
+        initUI();
+
+        //初始化数据
+        initDate();
+
+        //初始化动画
+        initAnimation();
+    }
+
+    /*
+    添加淡入的效果
+     */
+    private void initAnimation() {
+        AlphaAnimation alphaAnimation = new AlphaAnimation(0,1);
+        alphaAnimation.setDuration(3000);
+        rl_root.startAnimation(alphaAnimation);
+    }
+
 
     /**
      * 弹出对话框，提示用户更新
@@ -105,6 +140,14 @@ public class SplashActivity extends Activity {
                 enterHome();
             }
         });
+        builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                enterHome();
+                //即使用户点击取消，也需要进入应用主界面
+                dialog.dismiss();
+            }
+        });
         builder.show();
 
     }
@@ -128,6 +171,7 @@ public class SplashActivity extends Activity {
                     //下载成功
                     File file = responseInfo.result;
                     Log.e(TAG,"下载成功");
+                    installApk(file);
                 }
 
                 @Override
@@ -160,6 +204,29 @@ public class SplashActivity extends Activity {
         }
     }
 
+    /*
+    安装APK
+     */
+    private void installApk(File file) {
+        //调用系统安装APP
+        Intent intent = new Intent("android.intent.action.VIEW");
+        intent.addCategory("android.intent.category.DEFAULT");
+        //文件作为数据源
+//        intent.setData(Uri.fromFile(file));
+        //设置安装类型
+//        intent.setType("application/vnd.android.package-archive");
+        intent.setDataAndType(Uri.fromFile(file),"application/vnd.android.package-archive");
+//        startActivity(intent);
+        startActivityForResult(intent,0);
+
+    }
+    //开启一个Activity返回调用的结果
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        enterHome();
+    }
+
     private void enterHome() {
         //进入应用程序的主界面
         Intent intent = new Intent(this, MainActivity.class);
@@ -169,19 +236,6 @@ public class SplashActivity extends Activity {
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //去除标题栏,必须要继承Activity，不能继承AppCompatActivity
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_splash);
-
-        //初始化UI
-        initUI();
-
-        //初始化数据
-        initDate();
-    }
 
 
     /**
@@ -315,6 +369,7 @@ public class SplashActivity extends Activity {
      */
     private void initUI() {
         tv_version_name = (TextView) findViewById(R.id.tv_version_name);
+        rl_root = (RelativeLayout) findViewById(R.id.rl_root);
 
     }
 
