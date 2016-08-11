@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="com.waynian.mobilephonesafe.activity.SettingActivity">
     <TextView
@@ -46,9 +47,25 @@
     <!--</RelativeLayout>-->
 
     <com.waynian.mobilephonesafe.view.SettingItemView
+        xmlns:mobliesafe="http://schemas.android.com/apk/res/com.waynian.mobilephonesafe"
         android:id="@+id/siv_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        mobliesafe:destitle="自动更新设置"
+        mobliesafe:desoff="自动更新已关闭"
+        mobliesafe:deson="自动更新已开启"
+        >
+    </com.waynian.mobilephonesafe.view.SettingItemView>
+
+ <com.waynian.mobilephonesafe.view.SettingItemView
+        xmlns:mobliesafe="http://schemas.android.com/apk/res/com.waynian.mobilephonesafe"
+        android:id="@+id/siv_update1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        mobliesafe:destitle="电话归属地的显示设置"
+        mobliesafe:desoff="属地显示已关闭"
+        mobliesafe:deson="属地显示已开启"
+        >
     </com.waynian.mobilephonesafe.view.SettingItemView>
 
 </LinearLayout>

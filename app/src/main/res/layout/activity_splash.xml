@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/launcher_bg"
+    android:background="@mipmap/bg"
     android:id="@+id/rl_root"
     tools:context="com.waynian.mobilephonesafe.activity.SplashActivity">
 

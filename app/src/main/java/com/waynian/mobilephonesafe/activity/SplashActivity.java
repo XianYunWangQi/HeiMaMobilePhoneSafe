@@ -20,6 +20,8 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.waynian.mobilephonesafe.BuildConfig;
 import com.waynian.mobilephonesafe.R;
+import com.waynian.mobilephonesafe.utils.ConstantValue;
+import com.waynian.mobilephonesafe.utils.SpUtil;
 import com.waynian.mobilephonesafe.utils.StreamUtil;
 import com.waynian.mobilephonesafe.utils.ToastUtil;
 
@@ -256,8 +258,12 @@ public class SplashActivity extends Activity {
         服务器版本号
         新版本apk下载地址
          */
-
-        checkVersion();
+        if (SpUtil.getBoolean(this, ConstantValue.OPEN_UPDATE,false)) {
+            checkVersion();
+        }else {
+            //在发送消息4秒钟后，去处理当前ENTER_HOME状态0码指向的消息
+            mHandler.sendEmptyMessageDelayed(ENTER_HOME,4000);
+        }
     }
     /*
     检查版本
