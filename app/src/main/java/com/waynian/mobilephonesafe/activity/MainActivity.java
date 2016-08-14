@@ -5,23 +5,32 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.waynian.mobilephonesafe.R;
 import com.waynian.mobilephonesafe.utils.ConstantValue;
+import com.waynian.mobilephonesafe.utils.Md5Util;
 import com.waynian.mobilephonesafe.utils.SpUtil;
+import com.waynian.mobilephonesafe.utils.ToastUtil;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
     private GridView gv_home;
     private String[] mTitleStr;
     private int[] mImageId;
+    private EditText ed_set_psd;
+    private EditText ed_confir_psd;
+    private EditText ed_get_confir_psd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +79,10 @@ public class MainActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(psd)) {
             //1.初始设置密码的对话框
             showSetDialog();
-        }else {
+        } else {
             //2.确认密码对话框
             showConfirmPsdDialog();
         }
-
 
 
     }
@@ -83,7 +91,45 @@ public class MainActivity extends AppCompatActivity {
      * 确认密码对话框
      */
     private void showConfirmPsdDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_confirm_psd, null);
+        //对话框显示自己定义的一个界面
+        dialog.setView(view);
+        dialog.show();
+        Button bt_submit = (Button) view.findViewById(R.id.bt_submit);
+        Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+        ed_get_confir_psd = (EditText) view.findViewById(R.id.ed_get_confir_psd);
 
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String psd = ed_get_confir_psd.getText().toString();
+                String md5_psd = Md5Util.encoder(psd);
+                String get_psd = SpUtil.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
+                if (md5_psd.equals(get_psd)) {
+                    //进入手机防盗模块
+                    Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                    startActivity(intent);
+                    dialog.dismiss();
+
+                } else {
+                    //提示用户密码不能为空
+                    ToastUtil.show(getApplicationContext(), "密码错误");
+
+                }
+
+            }
+        });
+
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
     }
 
     /**
@@ -93,9 +139,52 @@ public class MainActivity extends AppCompatActivity {
         //需要自己定义对话框的展示样式，要调用dialog.setView(view);
         //view是自己定义的布局
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        AlertDialog dialog = builder.create();
-        View view = View.inflate(this,R.layout.dialog_set_psd,null);
+        final AlertDialog dialog = builder.create();
+        View view = View.inflate(this, R.layout.dialog_set_psd, null);
+        //对话框显示自己定义的一个界面
         dialog.setView(view);
+        dialog.show();
+        Button bt_submit = (Button) view.findViewById(R.id.bt_submit);
+        Button bt_cancel = (Button) view.findViewById(R.id.bt_cancel);
+        ed_set_psd = (EditText) view.findViewById(R.id.ed_set_psd);
+        ed_confir_psd = (EditText) view.findViewById(R.id.ed_confir_psd);
+
+        bt_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String psd = ed_set_psd.getText().toString();
+                String confirmPsd = ed_confir_psd.getText().toString();
+                String md5_psd = Md5Util.encoder(psd);
+                if (!TextUtils.isEmpty(psd) && !TextUtils.isEmpty(confirmPsd)) {
+                    if (psd.equals(confirmPsd)) {
+                        //进入手机防盗模块
+                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        startActivity(intent);
+                        SpUtil.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, md5_psd);
+                        dialog.dismiss();
+
+                    } else {
+                        //提示用户两次输入的密码不同
+                        ToastUtil.show(getApplicationContext(), "两次输入的密码不同");
+                    }
+                } else {
+                    //提示用户密码不能为空
+                    ToastUtil.show(getApplicationContext(), "密码不能为空");
+
+                }
+
+            }
+        });
+
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+
+            }
+        });
+
 
     }
 
