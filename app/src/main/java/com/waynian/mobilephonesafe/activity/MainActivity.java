@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                 String get_psd = SpUtil.getString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, "");
                 if (md5_psd.equals(get_psd)) {
                     //进入手机防盗模块
-                    Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                     startActivity(intent);
                     dialog.dismiss();
 
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(psd) && !TextUtils.isEmpty(confirmPsd)) {
                     if (psd.equals(confirmPsd)) {
                         //进入手机防盗模块
-                        Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), SetupOverActivity.class);
                         startActivity(intent);
                         SpUtil.putString(getApplicationContext(), ConstantValue.MOBILE_SAFE_PSD, md5_psd);
                         dialog.dismiss();
