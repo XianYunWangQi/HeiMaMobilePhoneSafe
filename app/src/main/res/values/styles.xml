@@ -30,5 +30,40 @@
         <item name="android:background">#0f0</item>
         <item name="android:gravity">center_horizontal</item>
     </style>
+    <!--<Button-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="下一页"-->
+    <!--android:background="@drawable/selector_next_btn_bg"-->
+    <!--android:layout_alignParentRight="true"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:drawableRight="@drawable/next"-->
+    <!--android:gravity="center_vertical"/>-->
+    <!--android:onClick="nextPage"-->
+    <style name="NextBtn">
+        <item name="android:text">下一页</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/selector_next_btn_bg</item>
+        <item name="android:drawableRight">@drawable/next</item>
+        <item name="android:onClick">nextPage</item>
+    </style>
+
+    <!--上一页-->
+    <style name="PreBtn">
+        <item name="android:text">上一页</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/selector_next_btn_bg</item>
+        <item name="android:drawableLeft">@drawable/previous</item>
+        <item name="android:onClick">prePage</item>
+    </style>
+
 
 </resources>

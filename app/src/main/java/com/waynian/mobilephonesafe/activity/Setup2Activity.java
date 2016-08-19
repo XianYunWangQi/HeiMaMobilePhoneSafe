@@ -7,15 +7,21 @@ import android.view.View;
 
 import com.waynian.mobilephonesafe.R;
 
-public class Setup1Activity extends AppCompatActivity {
+public class Setup2Activity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup1);
+        setContentView(R.layout.activity_setup2);
     }
     public void nextPage(View v){
-        Intent intent = new Intent(getApplicationContext(),Setup2Activity.class);
+        Intent intent = new Intent(getApplicationContext(),Setup3Activity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void prePage(View v){
+        Intent intent = new Intent(getApplicationContext(),Setup1Activity.class);
         startActivity(intent);
         finish();
     }
