@@ -73,7 +73,7 @@ public class SettingItemView extends RelativeLayout {
 
     /**
      *判断是否开启的方法
-     * @return当前checkbox是否为选中状态
+     * @return 当前checkbox是否为选中状态
      */
     public boolean isCheck(){
         //由checkbox决定当前条目是否开启
@@ -81,7 +81,7 @@ public class SettingItemView extends RelativeLayout {
     }
 
     /**
-     * @param isCheck 是否去做开启的变量，点击过程中去改变
+     * @param isCheck 去做是否开启的变量，点击过程中去改变
      */
     public void setCheck(boolean isCheck){
         cb_box.setChecked(isCheck);

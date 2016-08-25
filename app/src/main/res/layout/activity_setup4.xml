@@ -56,6 +56,7 @@
 
         <Button style="@style/PreBtn" />
 
-        <Button style="@style/NextBtn" />
+        <Button style="@style/NextBtn"
+            android:text="设置完成"/>
     </RelativeLayout>
 </LinearLayout>

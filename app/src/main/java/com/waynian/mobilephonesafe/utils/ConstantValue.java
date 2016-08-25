@@ -11,4 +11,6 @@ public class ConstantValue {
     public static final String MOBILE_SAFE_PSD = "mobile_safe_psd";
     //是否进入设置完成的界面
     public static final String SETUP_OVER = "setup_over";
+    //绑定SIM卡的key
+    public static final String SIM_NUMBER = "sim_number";
 }

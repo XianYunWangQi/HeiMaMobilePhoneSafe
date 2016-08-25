@@ -3,5 +3,6 @@
 
     <!--选中-->
     <item android:drawable="@drawable/function_greenbutton_pressed" android:state_pressed="true" />
+
     <item android:drawable="@drawable/function_greenbutton_normal" />
 </selector>
