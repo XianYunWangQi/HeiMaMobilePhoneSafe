@@ -1,6 +1,7 @@
 package com.waynian.mobilephonesafe.activity;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,15 +27,18 @@ public class ContactListActivity extends AppCompatActivity {
     private static final String TAG = "ContactListActivity";
     private ListView lv_contact;
     private List<HashMap<String, String>> contactList = new ArrayList<HashMap<String, String>>();
+    private MyAdapter mAdapter;
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             //8.填充数据适配器
-            MyAdapter myAdapter = new MyAdapter();
-            lv_contact.setAdapter(myAdapter);
+            mAdapter = new MyAdapter();
+            lv_contact.setAdapter(mAdapter);
         }
     };
+    private MyAdapter mAdapter1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +79,24 @@ public class ContactListActivity extends AppCompatActivity {
 
     private void initUI() {
         lv_contact = (ListView) findViewById(R.id.lv_contact);
+        lv_contact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //1.获取点中条目的索引指向集合的对象
+                if (mAdapter!=null){
+                HashMap<String,String> hashMap = mAdapter1.getItem(position);
+                    //2.获取当前条目指向的电话号码
+                    String phone = hashMap.get("phone");
+                    //3.此电话号码需要给第三个导航页面使用
+                    Intent intent = new Intent();
+                    intent.putExtra("phone",phone);
+                    setResult(0,intent);
+                    //4.在结束此界面，返回前一个界面，需要把数据传递过去
+                    finish();
+                }
+
+            }
+        });
 
     }
 

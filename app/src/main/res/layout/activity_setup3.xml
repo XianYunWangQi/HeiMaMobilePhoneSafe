@@ -67,8 +67,10 @@
             android:layout_centerInParent="true"
             android:src="@drawable/bind" />
 
-        <Button style="@style/PreBtn" />
+        <Button style="@style/PreBtn"
+            android:onClick="prePage"/>
 
-        <Button style="@style/NextBtn" />
+        <Button style="@style/NextBtn"
+            android:onClick="nextPage"/>
     </RelativeLayout>
 </LinearLayout>

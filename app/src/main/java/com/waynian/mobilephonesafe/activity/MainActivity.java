@@ -1,6 +1,7 @@
 package com.waynian.mobilephonesafe.activity;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -63,6 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         showDialog();
+                        break;
+                    case 1:
+                        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.ylzs);
+                        mediaPlayer.setLooping(true);
+                        mediaPlayer.start();
                         break;
                     case 8:
                         Intent intent = new Intent(getApplicationContext(), SettingActivity.class);
